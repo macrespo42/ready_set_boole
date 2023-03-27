@@ -37,5 +37,14 @@ mod introduction_test {
         assert_eq!(gray_code::gray_code(7), 4);
         assert_eq!(gray_code::gray_code(8), 12);
     }
+
+    #[test]
+    fn eval_formula_tests() {
+        assert_eq!(boolean_evaluation::eval_formula("10&"), false);
+        assert_eq!(boolean_evaluation::eval_formula("10|"), true);
+        assert_eq!(boolean_evaluation::eval_formula("11>"), true);
+        assert_eq!(boolean_evaluation::eval_formula("10="), false);
+        assert_eq!(boolean_evaluation::eval_formula("1011||="), true);
+    }
 }
 
