@@ -44,7 +44,7 @@ mod introduction_test {
         assert_eq!(boolean_evaluation::eval_formula("10|"), true);
         assert_eq!(boolean_evaluation::eval_formula("11>"), true);
         assert_eq!(boolean_evaluation::eval_formula("10="), false);
-        assert_eq!(boolean_evaluation::eval_formula("1011||="), true);
+        assert_eq!(boolean_evaluation::eval_formula("101|&"), true);
     }
 }
 
