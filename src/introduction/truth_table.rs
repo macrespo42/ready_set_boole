@@ -20,7 +20,7 @@ impl AstNode {
                 self.right_leaf.as_mut().unwrap().parse_formula(formula);
             }
             self.left_leaf.as_mut().unwrap().parse_formula(formula);
-        }
+        } 
     }
 
     fn compute(&mut self) -> bool {
@@ -51,8 +51,25 @@ fn eval_formula(formula: &str) -> bool {
     return root.compute();
 }
 
+fn print_truth_table_header(formula: &str) {
+    print!("|");
+    let mut header: Vec<char> = Vec::new();
+    for c in formula.chars() {
+        if c.is_alphabetic() {
+            header.push(c)
+        }
+    }
+    for letter in header.iter() {
+        print!(" {} |", letter);
+    }
+    println!(" = |");
+}
+
 pub fn print_truth_table(formula: &str) {
-    eval_formula(formula);
+    let mut formula_stack: Vec<char> = formula.chars().collect(); 
+    let mut root = AstNode::new('0');
+    root.parse_formula(&mut formula_stack);
+    print_truth_table_header(formula);
 }
 
 fn main() {
