@@ -1,3 +1,5 @@
+use std::collections::HashSet;
+
 struct AstNode {
     item: char,
     left_leaf: Option<Box<AstNode>>,
@@ -65,11 +67,47 @@ fn print_truth_table_header(formula: &str) {
     println!(" = |");
 }
 
+fn generate_combinations(formula: &str) -> Vec<String> {
+    let mut result_set: HashSet<String> = HashSet::new();
+    generate_combinations_helper(formula, &mut result_set);
+    result_set.into_iter().collect()
+}
+
+fn generate_combinations_helper(formula: &str, result_set: &mut HashSet<String>) {
+    if formula.is_empty() {
+        result_set.insert("".to_string());
+        return;
+    }
+    let rest = &formula[1..];
+    let sub_combinations = generate_combinations(rest);
+    let current_char = formula.chars().next().unwrap();
+    if current_char.is_alphabetic() {
+        for sub_combination in sub_combinations {
+            result_set.insert(format!("{}{}", '0', sub_combination));
+            result_set.insert(format!("{}{}", '1', sub_combination));
+        }
+    } else {
+        for sub_combination in sub_combinations {
+            let new_sub_combination = format!("{}{}", current_char, sub_combination);
+            result_set.insert(new_sub_combination);
+        }
+    }
+}
+
 pub fn print_truth_table(formula: &str) {
     let mut formula_stack: Vec<char> = formula.chars().collect(); 
     let mut root = AstNode::new('0');
     root.parse_formula(&mut formula_stack);
     print_truth_table_header(formula);
+    let combinations = generate_combinations(formula);
+    for combination in combinations {
+        for c in combination.chars() {
+            if c.is_numeric() {
+                print!("| {} ", c);
+            }
+        }
+        println!("| {} |", if eval_formula(&combination) {'1'} else {'0'});
+    }
 }
 
 fn main() {
