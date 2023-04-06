@@ -86,14 +86,10 @@ pub fn sat(formula: &str) -> bool {
     root.parse_formula(&mut formula_stack);
     let combinations = generate_combinations(formula);
     for combination in combinations {
-        if eval_formula(&combination) == false {
-            return false;
+        if eval_formula(&combination) == true {
+            return true;
         }
     }
-    true
-}
-
-fn main() {
-    println!("{}", sat("AB|"));
+    false 
 }
 

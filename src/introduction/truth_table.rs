@@ -115,5 +115,5 @@ pub fn print_truth_table(formula: &str) {
 }
 
 fn main() {
-    print_truth_table("AB|");
+    print_truth_table("ABA&|");
 }
