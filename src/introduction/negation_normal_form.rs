@@ -1,5 +1,3 @@
-use std::ptr::slice_from_raw_parts;
-
 struct AstNode {
     item: char,
     left_leaf: Option<Box<AstNode>>,
@@ -25,6 +23,15 @@ impl AstNode {
         } 
     }
 
+    fn is_in(&self, haystack: &str) -> bool {
+        for c in haystack.chars() {
+            if self.item == c {
+                return true;
+            }
+        }
+        false
+    }
+
     fn negation_normal_form(&mut self) {
         if self.left_leaf.is_some() {
             self.left_leaf.as_mut().unwrap().negation_normal_form();
@@ -33,10 +40,24 @@ impl AstNode {
             self.right_leaf.as_mut().unwrap().negation_normal_form();
         }
         // DO STUFF
-        // change root (!) to operator (|& etc...)
-        // change old operator to !
-        // delete old operator link to A
-        // create a left child to root (the new operator) that point on ! that point himself to A
+        if self.item == '!' && self.left_leaf.as_ref().unwrap().is_in("&|"){
+            // Save node right
+            let right_cpy = self.left_leaf.as_ref().unwrap().right_leaf;
+            // change root (!) to operator (|& etc...)
+            if self.left_leaf.as_ref().unwrap().item == '|' {
+                self.item = '&';
+            } else {
+                self.item = '|';
+            }
+            // change old operator to !
+            self.left_leaf.as_mut().unwrap().item = '!';
+            // delete old operator link to A
+            self.left_leaf.as_mut().unwrap().right_leaf = None;
+            // create a left child to root (the new operator) that point on ! that point himself to A
+            self.right_leaf = Some(Box::new(AstNode::new('!')));
+            self.right_leaf.as_mut().unwrap().left_leaf = right_cpy;
+            // PYTHON ADVANTAGE DON'T BREAK MY BALLS EVERY SINGLE LINE WROTED
+        }
         print!("{}", self.item);
     }
 }
