@@ -46,5 +46,13 @@ mod introduction_test {
         assert_eq!(boolean_evaluation::eval_formula("10="), false);
         assert_eq!(boolean_evaluation::eval_formula("101|&"), true);
     }
+
+    #[test]
+    fn sat_test() {
+        assert_eq!(sat::sat("AB|"), true);
+        assert_eq!(sat::sat("AB&"), true);
+        assert_eq!(sat::sat("AA!&"), false);
+        assert_eq!(sat::sat("AA^!"), false);
+    }
 }
 

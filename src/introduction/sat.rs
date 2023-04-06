@@ -53,24 +53,6 @@ fn eval_formula(formula: &str) -> bool {
     return root.compute();
 }
 
-fn print_truth_table_header(formula: &str) {
-    print!("|");
-    let mut header: Vec<char> = formula.chars().collect();
-    header.sort_unstable();
-    header.dedup();
-    for letter in header.iter() {
-        if letter.is_alphabetic() {
-            print!(" {} |", letter);
-        }
-    }
-    println!(" = |");
-    print!("|");
-    for _n in 1..header.len() {
-        print!("---|");
-    }
-    println!("");
-}
-
 fn generate_combinations(formula: &str) -> Vec<String> {
     let mut result_set: HashSet<String> = HashSet::new();
     generate_combinations_helper(formula, &mut result_set);
@@ -98,22 +80,20 @@ fn generate_combinations_helper(formula: &str, result_set: &mut HashSet<String>)
     }
 }
 
-pub fn print_truth_table(formula: &str) {
+pub fn sat(formula: &str) -> bool {
     let mut formula_stack: Vec<char> = formula.chars().collect(); 
     let mut root = AstNode::new('0');
     root.parse_formula(&mut formula_stack);
-    print_truth_table_header(formula);
     let combinations = generate_combinations(formula);
     for combination in combinations {
-        for c in combination.chars() {
-            if c.is_numeric() {
-                print!("| {} ", c);
-            }
+        if eval_formula(&combination) == false {
+            return false;
         }
-        println!("| {} |", if eval_formula(&combination) {'1'} else {'0'});
     }
+    true
 }
 
 fn main() {
-    print_truth_table("AB|");
+    println!("{}", sat("AB|"));
 }
+
