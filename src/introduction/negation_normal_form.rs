@@ -57,6 +57,17 @@ impl AstNode {
             self.right_leaf = Some(Box::new(AstNode::new('!')));
             self.right_leaf.as_mut().unwrap().left_leaf = right_cpy;
         }
+        // IF AB>
+        if self.item == '>' {
+            // Save node right
+            let left_cpy = self.left_leaf.take();
+            // > become |
+            self.item = '|';
+            // B get a !
+            self.left_leaf = Some(Box::new(AstNode::new('!')));
+            // create a new child for old B who is B 
+            self.left_leaf.as_mut().unwrap().left_leaf= left_cpy;
+        }
     }
 
     fn stringify(&mut self) -> String {
@@ -84,7 +95,8 @@ pub fn negation_normal_form(formula: &str) -> String {
 }
 
 
-fn main() {
+fn main(){
     println!("{}", negation_normal_form("AB&!"));
     println!("{}", negation_normal_form("AB|!"));
+    println!("{}", negation_normal_form("AB>"));
 }
