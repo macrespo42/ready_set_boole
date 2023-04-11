@@ -42,7 +42,7 @@ impl AstNode {
         // DO STUFF
         if self.item == '!' && self.left_leaf.as_ref().unwrap().is_in("&|"){
             // Save node right
-            let right_cpy = self.left_leaf.as_ref().unwrap().right_leaf;
+            let right_cpy = self.left_leaf.as_mut().unwrap().right_leaf.take();
             // change root (!) to operator (|& etc...)
             if self.left_leaf.as_ref().unwrap().item == '|' {
                 self.item = '&';
@@ -56,9 +56,22 @@ impl AstNode {
             // create a left child to root (the new operator) that point on ! that point himself to A
             self.right_leaf = Some(Box::new(AstNode::new('!')));
             self.right_leaf.as_mut().unwrap().left_leaf = right_cpy;
-            // PYTHON ADVANTAGE DON'T BREAK MY BALLS EVERY SINGLE LINE WROTED
         }
-        print!("{}", self.item);
+    }
+
+    fn stringify(&mut self) -> String {
+        let mut expr = String::from("").to_owned();
+
+        if self.left_leaf.is_some() {
+            expr.push_str(&self.left_leaf.as_mut().unwrap().stringify());
+        }
+
+        if self.right_leaf.is_some() {
+            expr.push_str(&self.right_leaf.as_mut().unwrap().stringify());
+        }
+        
+        expr.push(self.item);
+        expr
     }
 }
 
@@ -67,11 +80,11 @@ pub fn negation_normal_form(formula: &str) -> String {
    let mut root = AstNode::new('0');
    root.parse_formula(&mut formula_stack);
    root.negation_normal_form();
-   println!("");
-   String::from("coucou")
+   root.stringify()
 }
 
 
 fn main() {
-    println!("{}", negation_normal_form("AB|!"))
+    println!("{}", negation_normal_form("AB&!"));
+    println!("{}", negation_normal_form("AB|!"));
 }
