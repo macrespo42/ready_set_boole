@@ -52,6 +52,8 @@ mod introduction_test {
         assert_eq!(negation_normal_form::negation_normal_form("AB|!"), "A!B!&");
         assert_eq!(negation_normal_form::negation_normal_form("AB&!"), "A!B!|");
         assert_eq!(negation_normal_form::negation_normal_form("AB>"), "A!B|");
+        assert_eq!(negation_normal_form::negation_normal_form("AB="), "AB&A!B!&|");
+        assert_eq!(negation_normal_form::negation_normal_form("AB|C&!"), "A!B!&C!|");
     }
 
     #[test]

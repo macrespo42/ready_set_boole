@@ -1,3 +1,4 @@
+#[derive(Clone)]
 struct AstNode {
     item: char,
     left_leaf: Option<Box<AstNode>>,
@@ -40,6 +41,7 @@ impl AstNode {
             self.right_leaf.as_mut().unwrap().negation_normal_form();
         }
         // DO STUFF
+
         if self.item == '!' && self.left_leaf.as_ref().unwrap().is_in("&|"){
             // Save node right
             let right_cpy = self.left_leaf.as_mut().unwrap().right_leaf.take();
@@ -57,7 +59,25 @@ impl AstNode {
             self.right_leaf = Some(Box::new(AstNode::new('!')));
             self.right_leaf.as_mut().unwrap().left_leaf = right_cpy;
         }
-        // IF AB>
+
+        if self.item == '=' {
+            // root become ^
+            self.item = '&';
+            // save 2 root child
+            let a_cpy = self.left_leaf.take();
+            let b_cpy = self.right_leaf.take();
+            // change 2 root child to => 
+            self.left_leaf = Some(Box::new(AstNode::new('>')));
+            self.right_leaf = Some(Box::new(AstNode::new('>')));
+            // assign A / B to new childs =>
+            // left left
+            self.left_leaf.as_mut().unwrap().left_leaf = a_cpy.clone();
+            self.left_leaf.as_mut().unwrap().right_leaf = b_cpy.clone();
+            // right leaf
+            self.right_leaf.as_mut().unwrap().left_leaf = b_cpy.clone();
+            self.right_leaf.as_mut().unwrap().right_leaf = a_cpy.clone();
+        }
+
         if self.item == '>' {
             // Save node right
             let left_cpy = self.left_leaf.take();
@@ -71,7 +91,7 @@ impl AstNode {
     }
 
     fn stringify(&mut self) -> String {
-        let mut expr = String::from("").to_owned();
+        let mut expr = String::from("");
 
         if self.left_leaf.is_some() {
             expr.push_str(&self.left_leaf.as_mut().unwrap().stringify());
@@ -99,4 +119,5 @@ fn main(){
     println!("{}", negation_normal_form("AB&!"));
     println!("{}", negation_normal_form("AB|!"));
     println!("{}", negation_normal_form("AB>"));
+    println!("{}", negation_normal_form("AB="));
 }
