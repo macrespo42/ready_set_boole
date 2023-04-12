@@ -37,56 +37,70 @@ impl AstNode {
         if self.left_leaf.is_some() {
             self.left_leaf.as_mut().unwrap().negation_normal_form();
         }
+
         if self.right_leaf.is_some() {
             self.right_leaf.as_mut().unwrap().negation_normal_form();
         }
-        // DO STUFF
 
         if self.item == '!' && self.left_leaf.as_ref().unwrap().is_in("&|"){
-            // Save node right
             let right_cpy = self.left_leaf.as_mut().unwrap().right_leaf.take();
-            // change root (!) to operator (|& etc...)
+
             if self.left_leaf.as_ref().unwrap().item == '|' {
                 self.item = '&';
             } else {
                 self.item = '|';
             }
-            // change old operator to !
+
             self.left_leaf.as_mut().unwrap().item = '!';
-            // delete old operator link to A
             self.left_leaf.as_mut().unwrap().right_leaf = None;
-            // create a left child to root (the new operator) that point on ! that point himself to A
+
             self.right_leaf = Some(Box::new(AstNode::new('!')));
             self.right_leaf.as_mut().unwrap().left_leaf = right_cpy;
+
+            self.negation_normal_form();
         }
 
         if self.item == '=' {
-            // root become ^
             self.item = '&';
-            // save 2 root child
             let a_cpy = self.left_leaf.take();
             let b_cpy = self.right_leaf.take();
-            // change 2 root child to => 
+
             self.left_leaf = Some(Box::new(AstNode::new('>')));
             self.right_leaf = Some(Box::new(AstNode::new('>')));
-            // assign A / B to new childs =>
-            // left left
+
             self.left_leaf.as_mut().unwrap().left_leaf = a_cpy.clone();
             self.left_leaf.as_mut().unwrap().right_leaf = b_cpy.clone();
-            // right leaf
+
             self.right_leaf.as_mut().unwrap().left_leaf = b_cpy.clone();
             self.right_leaf.as_mut().unwrap().right_leaf = a_cpy.clone();
+
+            self.negation_normal_form();
+        }
+
+        if self.item == '^' {
+            self.item = '|';
+            let a_cpy = self.left_leaf.take();
+            let b_cpy = self.right_leaf.take();
+
+            self.left_leaf = Some(Box::new(AstNode::new('&')));
+            self.right_leaf = Some(Box::new(AstNode::new('&')));
+
+            self.left_leaf.as_mut().unwrap().right_leaf = Some(Box::new(AstNode::new('!')));
+            self.left_leaf.as_mut().unwrap().right_leaf.as_mut().unwrap().left_leaf = b_cpy.clone();
+            self.left_leaf.as_mut().unwrap().left_leaf = a_cpy.clone();
+
+            self.right_leaf.as_mut().unwrap().left_leaf = Some(Box::new(AstNode::new('!')));
+            self.right_leaf.as_mut().unwrap().left_leaf.as_mut().unwrap().left_leaf = a_cpy.clone();
+            self.right_leaf.as_mut().unwrap().right_leaf = b_cpy.clone();
+            self.negation_normal_form();
         }
 
         if self.item == '>' {
-            // Save node right
             let left_cpy = self.left_leaf.take();
-            // > become |
             self.item = '|';
-            // B get a !
             self.left_leaf = Some(Box::new(AstNode::new('!')));
-            // create a new child for old B who is B 
             self.left_leaf.as_mut().unwrap().left_leaf= left_cpy;
+            self.negation_normal_form();
         }
     }
 
@@ -120,4 +134,6 @@ fn main(){
     println!("{}", negation_normal_form("AB|!"));
     println!("{}", negation_normal_form("AB>"));
     println!("{}", negation_normal_form("AB="));
+    println!("{}", negation_normal_form("AB|C&!"));
+    println!("{}", negation_normal_form("AB^"));
 }
