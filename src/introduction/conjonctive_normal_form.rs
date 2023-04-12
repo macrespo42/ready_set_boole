@@ -114,16 +114,58 @@ impl AstNode {
         if self.right_leaf.is_some() {
             expr.push_str(&self.right_leaf.as_mut().unwrap().stringify());
         }
+
         expr.push(self.item);
         expr
     }
+
+    fn is_conjonctive(&self) -> bool {
+        if self.item == '|' {
+            if (self.right_leaf.as_ref().unwrap().item == '&' || self.left_leaf.as_ref().unwrap().item == '&') &&
+                (self.right_leaf.as_ref().unwrap().is_in("&|") || self.left_leaf.as_ref().unwrap().is_in("&|")) {
+                    return false;
+                }
+        }
+        true
+    }
+
+    fn conjonctive_normal_form(&mut self) {
+        if self.left_leaf.is_some() {
+            self.left_leaf.as_mut().unwrap().conjonctive_normal_form();
+        } 
+
+        if self.right_leaf.is_some() {
+            self.right_leaf.as_mut().unwrap().conjonctive_normal_form();
+        }
+        // DO STUFF
+        // if item = | and item left or item right is &
+        if self.is_conjonctive() == false {
+            self.item = '&';
+            let x_cpy = self.left_leaf.take();
+            let a_cpy = self.right_leaf.as_mut().unwrap().left_leaf.take();
+            let b_cpy = self.right_leaf.as_mut().unwrap().right_leaf.take();
+
+            self.left_leaf = Some(Box::new(AstNode::new('|')));
+            self.right_leaf = Some(Box::new(AstNode::new('|')));
+
+            self.left_leaf.as_mut().unwrap().left_leaf = x_cpy.clone();
+            self.left_leaf.as_mut().unwrap().right_leaf = a_cpy;
+
+            self.right_leaf.as_mut().unwrap().left_leaf = x_cpy.clone();
+            self.right_leaf.as_mut().unwrap().left_leaf = b_cpy;
+        }
+    }
 }
 
-pub fn negation_normal_form(formula: &str) -> String {
+fn conjonctive_normal_form(formula: &str) -> String {
     let mut formula_stack: Vec<char> = formula.chars().collect();
     let mut root = AstNode::new('0');
     root.parse_formula(&mut formula_stack);
     root.negation_normal_form();
+    root.conjonctive_normal_form();
     root.stringify()
 }
 
+fn main() {
+    println!("{}", conjonctive_normal_form("ABCD&|&"));
+}
