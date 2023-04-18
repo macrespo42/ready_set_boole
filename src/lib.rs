@@ -1,6 +1,8 @@
 pub mod introduction;
+pub mod rewrite_rule;
 
 use crate::introduction::*;
+use crate::rewrite_rule::*;
 
 #[cfg(test)]
 mod introduction_test {
