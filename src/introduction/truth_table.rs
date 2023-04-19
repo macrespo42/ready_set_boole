@@ -14,7 +14,7 @@ impl AstNode {
     fn parse_formula(&mut self, formula: &mut Vec<char>) {
         let operand: Vec<char> = vec!['!', '&', '|', '^', '>', '='];
         self.item = formula.last().copied().unwrap();
-        let c: char = formula.pop().unwrap();
+        let c: char = formula.pop().unwrap()
         if operand.iter().any( |&i| i == c) {
             self.left_leaf = Some(Box::new(AstNode::new('0')));
             if c != '!' {

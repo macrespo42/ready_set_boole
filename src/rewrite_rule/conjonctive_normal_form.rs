@@ -163,11 +163,3 @@ fn conjonctive_normal_form(formula: &str) -> String {
     root.conjonctive_normal_form();
     root.stringify()
 }
-
-fn main() {
-    println!("{}", conjonctive_normal_form("AB&!"));
-    println!("{}", conjonctive_normal_form("AB|!"));
-    println!("{}", conjonctive_normal_form("AB|C&"));
-    println!("{}", conjonctive_normal_form("AB&!C!|"));
-    println!("{}", conjonctive_normal_form("AB|!C!&"));
-}
