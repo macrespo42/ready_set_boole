@@ -62,6 +62,18 @@ mod introduction_test {
     }
 
     #[test]
+    fn conjunctive_normal_form_test() {
+       assert_eq!(conjuctive_normal_form::conjunctive_normal_form("AB&!"), "A!B!|");
+       assert_eq!(conjuctive_normal_form::conjunctive_normal_form("AB|!"), "A!B!&");
+       assert_eq!(conjuctive_normal_form::conjunctive_normal_form("AB|C&"), "AB|C&");
+       assert_eq!(conjuctive_normal_form::conjunctive_normal_form("AB|C|D|"), "DCAB|||");
+       assert_eq!(conjuctive_normal_form::conjunctive_normal_form("AB&C&D&"), "DCAB&&&");
+       assert_eq!(conjuctive_normal_form::conjunctive_normal_form("AB&!C!|"), "C!A!B!||");
+       assert_eq!(conjuctive_normal_form::conjunctive_normal_form("AB|!C!&"), "C!A!B!&&");
+       assert_eq!(conjuctive_normal_form::conjunctive_normal_form("ABDE&|&"), "ABD|BE|&&");
+    }
+
+    #[test]
     fn sat_test() {
         assert_eq!(sat::sat("AB|"), true);
         assert_eq!(sat::sat("AB&"), true);

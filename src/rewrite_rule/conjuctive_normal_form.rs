@@ -119,7 +119,7 @@ impl AstNode {
         expr
     }
 
-    fn is_conjonctive(&self) -> bool {
+    fn is_conjunctive(&self) -> bool {
         if self.item == '|' {
             if (self.right_leaf.as_ref().unwrap().item == '&' || self.left_leaf.as_ref().unwrap().item == '&') &&
                 (self.right_leaf.as_ref().unwrap().is_in("&|") || self.left_leaf.as_ref().unwrap().is_in("&|")) {
@@ -129,15 +129,15 @@ impl AstNode {
         true
     }
 
-    fn conjonctive_normal_form(&mut self) {
+    fn conjunctive_normal_form(&mut self) {
         if self.left_leaf.is_some() {
-            self.left_leaf.as_mut().unwrap().conjonctive_normal_form();
+            self.left_leaf.as_mut().unwrap().conjunctive_normal_form();
         } 
 
         if self.right_leaf.is_some() {
-            self.right_leaf.as_mut().unwrap().conjonctive_normal_form();
+            self.right_leaf.as_mut().unwrap().conjunctive_normal_form();
         }
-        if self.is_conjonctive() == false {
+        if self.is_conjunctive() == false {
             self.item = '&';
             let x_cpy = self.left_leaf.take();
             let a_cpy = self.right_leaf.as_mut().unwrap().left_leaf.take();
@@ -150,16 +150,26 @@ impl AstNode {
             self.left_leaf.as_mut().unwrap().right_leaf = a_cpy;
 
             self.right_leaf.as_mut().unwrap().left_leaf = x_cpy.clone();
-            self.right_leaf.as_mut().unwrap().left_leaf = b_cpy;
+            self.right_leaf.as_mut().unwrap().right_leaf = b_cpy;
+        }
+
+        if self.is_in("&|") {
+            if (self.left_leaf.is_some() && self.left_leaf.as_ref().unwrap().item == self.item) && 
+                (self.right_leaf.as_ref().unwrap().is_in("!") || self.right_leaf.as_ref().unwrap().item.is_ascii_alphanumeric()) {
+                    let right_child_cpy = self.right_leaf.take();
+                    let left_child_cpy = self.left_leaf.take();
+                    self.right_leaf = left_child_cpy;
+                    self.left_leaf = right_child_cpy;
+                }
         }
     }
 }
 
-fn conjonctive_normal_form(formula: &str) -> String {
+pub fn conjunctive_normal_form(formula: &str) -> String {
     let mut formula_stack: Vec<char> = formula.chars().collect();
     let mut root = AstNode::new('0');
     root.parse_formula(&mut formula_stack);
     root.negation_normal_form();
-    root.conjonctive_normal_form();
+    root.conjunctive_normal_form();
     root.stringify()
 }
