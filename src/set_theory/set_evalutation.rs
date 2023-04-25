@@ -115,12 +115,11 @@ impl AstNode {
            result = sets[self.item as usize - A_ASCII].clone();
         }
         else if self.item == '!' {
-            // for element in superset.clone().iter() {
-            //     if !sets[self.left_leaf.as_ref().unwrap().item as usize - A_ASCII].clone().contains(element) {
-            //         result.push(*element);
-            //     }
-            // }
-            // return self.left_leaf.as_mut().unwrap().compute(sets, superset);
+            for element in superset.clone().iter() {
+                if !self.left_leaf.as_mut().unwrap().compute(sets, superset).contains(element) {
+                    result.push(*element);
+                }
+            }
         }
         else if self.item == '|' {
             let mut set: HashSet<i32> = HashSet::new();
@@ -164,35 +163,4 @@ pub fn eval_set(formula: &str, sets: &Vec<Vec<i32>>) -> Vec<i32> {
         root.negation_normal_form();
         root.compute(sets, &mut get_superset(sets))
     }
-}
-
-fn main() {
-    let sets = vec![
-        vec![0, 1, 2],
-        vec![0, 3, 4],
-    ];
-    let result = eval_set("BA&", &sets);
-    println!("{:?}", result);
-    // [0]
-    let sets = vec![
-        vec![0, 1, 2],
-        vec![3, 4, 5],
-    ];
-    let result = eval_set("AB|", &sets);
-    println!("{:?}", result);
-    // [0, 1, 2, 3, 4, 5]
-    let sets = vec![
-        vec![0, 1, 2],
-        vec![3, 4, 5]
-    ];
-    let result = eval_set("AB&!", &sets);
-    println!("{:?}", result);
-    // []
-    // let sets = vec![
-    //     vec![0, 1, 2],
-    //     vec![2, 3, 5],
-    //     vec![0, 5, 1],
-    // ];
-    // let result = eval_set("A!B&B!A&|", &sets); // <-- invalid, diff number
-    // println!("{:?}", result);
 }
