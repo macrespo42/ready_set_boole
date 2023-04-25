@@ -8,6 +8,8 @@ use crate::set_theory::*;
 
 #[cfg(test)]
 mod introduction_test {
+    use crate::set_theory::set_evalutation::eval_set;
+
     use super::*;
 
     #[test]
@@ -79,6 +81,32 @@ mod introduction_test {
         assert_eq!(sat::sat("AB&"), true);
         // assert_eq!(sat::sat("AA!&"), false);
         // assert_eq!(sat::sat("AA^!"), false);
+    }
+
+    #[test]
+    fn eval_set_test() {
+        
+    let sets = vec![
+        vec![0, 1, 2],
+        vec![0, 3, 4],
+    ];
+
+    assert_eq!(set_evalutation::eval_set("AB&", &sets), [0]);
+
+    let sets = vec![
+        vec![0, 1, 2],
+        vec![3, 4, 5],
+    ];
+    
+    let mut result: Vec<i32> = set_evalutation::eval_set("AB|", &sets);
+    result.sort();
+    assert_eq!(result, vec![0, 1, 2, 3, 4, 5]);
+
+    let sets = vec![
+        vec![0, 1, 2],
+    ];
+
+    assert_eq!(set_evalutation::eval_set("A!", &sets), []);
     }
 }
 

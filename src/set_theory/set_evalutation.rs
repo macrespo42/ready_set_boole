@@ -1,5 +1,7 @@
 use std::collections::HashSet;
 
+const A_ASCII: usize = 65;
+
 #[derive(Clone)]
 struct AstNode {
     item: char,
@@ -108,28 +110,30 @@ impl AstNode {
 
     fn compute(&mut self, sets: &Vec<Vec<i32>>, superset: &mut Vec<i32>) -> Vec<i32> {
         let mut result: Vec<i32> = Vec::new();
+
         if !self.is_in("&|!") {
-           result = sets[self.item as usize - 65].clone();
+           result = sets[self.item as usize - A_ASCII].clone();
         }
         else if self.item == '!' {
-            for x in sets[self.left_leaf.as_mut().unwrap().item as usize - 65].clone().iter() {
-                superset.retain(|elt| *elt != *x);
-            }
+            // for element in superset.clone().iter() {
+            //     if !sets[self.left_leaf.as_ref().unwrap().item as usize - A_ASCII].clone().contains(element) {
+            //         result.push(*element);
+            //     }
+            // }
+            // return self.left_leaf.as_mut().unwrap().compute(sets, superset);
         }
         else if self.item == '|' {
             let mut set: HashSet<i32> = HashSet::new();
-            set.extend(sets[self.left_leaf.as_mut().unwrap().item as usize - 65].clone());
-            set.extend(sets[self.right_leaf.as_mut().unwrap().item as usize - 65].clone());
+            set.extend(self.left_leaf.as_mut().unwrap().compute(sets, superset));
+            set.extend(self.right_leaf.as_mut().unwrap().compute(sets, superset));
             for x in set.iter() {
-                if superset.contains(x) {
                     result.push(*x);
-                }
             }
         }
         else if self.item == '&' {
-            for x in sets[self.left_leaf.as_mut().unwrap().item as usize - 65].iter() {
-               if sets[self.right_leaf.as_mut().unwrap().item as usize - 65].contains(x) && superset.contains(x) {
-                   result.push(*x);
+            for x in self.left_leaf.as_mut().unwrap().compute(sets, superset) {
+               if self.right_leaf.as_mut().unwrap().compute(sets, superset).contains(&x) {
+                   result.push(x);
                }
             }
         }
@@ -167,20 +171,28 @@ fn main() {
         vec![0, 1, 2],
         vec![0, 3, 4],
     ];
-
-    println!("{:?}", eval_set("AB&", &sets));
-
+    let result = eval_set("BA&", &sets);
+    println!("{:?}", result);
+    // [0]
     let sets = vec![
         vec![0, 1, 2],
         vec![3, 4, 5],
     ];
-
-    println!("{:?}", eval_set("AB|", &sets));
-
-    let set = vec![
-        vec![0, 1, 2, 4, 5],
+    let result = eval_set("AB|", &sets);
+    println!("{:?}", result);
+    // [0, 1, 2, 3, 4, 5]
+    let sets = vec![
+        vec![0, 1, 2],
+        vec![3, 4, 5]
     ];
-
-    println!("{:?}", eval_set("A", &set));
-    println!("{:?}", eval_set("A!", &set));
+    let result = eval_set("AB&!", &sets);
+    println!("{:?}", result);
+    // []
+    // let sets = vec![
+    //     vec![0, 1, 2],
+    //     vec![2, 3, 5],
+    //     vec![0, 5, 1],
+    // ];
+    // let result = eval_set("A!B&B!A&|", &sets); // <-- invalid, diff number
+    // println!("{:?}", result);
 }
