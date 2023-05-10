@@ -1,26 +1,29 @@
 pub mod introduction;
 pub mod rewrite_rule;
 pub mod set_theory;
-pub mod spaces_filling_curves; 
+pub mod spaces_filling_curves;
 
 use crate::introduction::*;
+#[allow(unused_imports)]
 use crate::rewrite_rule::*;
+#[allow(unused_imports)]
 use crate::set_theory::*;
 
 #[cfg(test)]
 mod introduction_test {
+    #[allow(unused_imports)]
     use crate::set_theory::set_evalutation::eval_set;
 
     use super::*;
 
     #[test]
     fn adder_tests() {
-       assert_eq!(adder::adder(4, 2), 6);
-       assert_eq!(adder::adder(0, 0), 0);
-       assert_eq!(adder::adder(4, 0), 4);
-       assert_eq!(adder::adder(0, 2), 2);
-       assert_eq!(adder::adder(4000, 2000), 6000);
-       assert_eq!(adder::adder(40000, 20000), 60000);
+        assert_eq!(adder::adder(4, 2), 6);
+        assert_eq!(adder::adder(0, 0), 0);
+        assert_eq!(adder::adder(4, 0), 4);
+        assert_eq!(adder::adder(0, 2), 2);
+        assert_eq!(adder::adder(4000, 2000), 6000);
+        assert_eq!(adder::adder(40000, 20000), 60000);
     }
 
     #[test]
@@ -59,21 +62,54 @@ mod introduction_test {
         assert_eq!(negation_normal_form::negation_normal_form("AB|!"), "A!B!&");
         assert_eq!(negation_normal_form::negation_normal_form("AB&!"), "A!B!|");
         assert_eq!(negation_normal_form::negation_normal_form("AB>"), "A!B|");
-        assert_eq!(negation_normal_form::negation_normal_form("AB="), "A!B|B!A|&");
-        assert_eq!(negation_normal_form::negation_normal_form("AB|C&!"), "A!B!&C!|");
-        assert_eq!(negation_normal_form::negation_normal_form("AB^"), "AB!&A!B&|");
+        assert_eq!(
+            negation_normal_form::negation_normal_form("AB="),
+            "A!B|B!A|&"
+        );
+        assert_eq!(
+            negation_normal_form::negation_normal_form("AB|C&!"),
+            "A!B!&C!|"
+        );
+        assert_eq!(
+            negation_normal_form::negation_normal_form("AB^"),
+            "AB!&A!B&|"
+        );
     }
 
     #[test]
     fn conjunctive_normal_form_test() {
-       assert_eq!(conjuctive_normal_form::conjunctive_normal_form("AB&!"), "A!B!|");
-       assert_eq!(conjuctive_normal_form::conjunctive_normal_form("AB|!"), "A!B!&");
-       assert_eq!(conjuctive_normal_form::conjunctive_normal_form("AB|C&"), "AB|C&");
-       assert_eq!(conjuctive_normal_form::conjunctive_normal_form("AB|C|D|"), "DCAB|||");
-       assert_eq!(conjuctive_normal_form::conjunctive_normal_form("AB&C&D&"), "DCAB&&&");
-       assert_eq!(conjuctive_normal_form::conjunctive_normal_form("AB&!C!|"), "C!A!B!||");
-       assert_eq!(conjuctive_normal_form::conjunctive_normal_form("AB|!C!&"), "C!A!B!&&");
-       assert_eq!(conjuctive_normal_form::conjunctive_normal_form("ABDE&|&"), "ABD|BE|&&");
+        assert_eq!(
+            conjuctive_normal_form::conjunctive_normal_form("AB&!"),
+            "A!B!|"
+        );
+        assert_eq!(
+            conjuctive_normal_form::conjunctive_normal_form("AB|!"),
+            "A!B!&"
+        );
+        assert_eq!(
+            conjuctive_normal_form::conjunctive_normal_form("AB|C&"),
+            "AB|C&"
+        );
+        assert_eq!(
+            conjuctive_normal_form::conjunctive_normal_form("AB|C|D|"),
+            "DCAB|||"
+        );
+        assert_eq!(
+            conjuctive_normal_form::conjunctive_normal_form("AB&C&D&"),
+            "DCAB&&&"
+        );
+        assert_eq!(
+            conjuctive_normal_form::conjunctive_normal_form("AB&!C!|"),
+            "C!A!B!||"
+        );
+        assert_eq!(
+            conjuctive_normal_form::conjunctive_normal_form("AB|!C!&"),
+            "C!A!B!&&"
+        );
+        assert_eq!(
+            conjuctive_normal_form::conjunctive_normal_form("ABDE&|&"),
+            "ABD|BE|&&"
+        );
     }
 
     #[test]
@@ -88,33 +124,35 @@ mod introduction_test {
     fn powerset_test() {
         assert_eq!(powerset::powerset(&[]), [[]]);
         assert_eq!(powerset::powerset(&[42]), vec![vec![], vec![42]]);
-        assert_eq!(powerset::powerset(&[1, 2, 3]), vec![vec![], vec![1], vec![2], vec![1, 2], vec![3], vec![1, 3], vec![2, 3], vec![1, 2, 3]]);
+        assert_eq!(
+            powerset::powerset(&[1, 2, 3]),
+            vec![
+                vec![],
+                vec![1],
+                vec![2],
+                vec![1, 2],
+                vec![3],
+                vec![1, 3],
+                vec![2, 3],
+                vec![1, 2, 3]
+            ]
+        );
     }
 
     #[test]
     fn eval_set_test() {
-        
-    let sets = vec![
-        vec![0, 1, 2],
-        vec![0, 3, 4],
-    ];
+        let sets = vec![vec![0, 1, 2], vec![0, 3, 4]];
 
-    assert_eq!(set_evalutation::eval_set("AB&", &sets), [0]);
+        assert_eq!(set_evalutation::eval_set("AB&", &sets), [0]);
 
-    let sets = vec![
-        vec![0, 1, 2],
-        vec![3, 4, 5],
-    ];
-    
-    let mut result: Vec<i32> = set_evalutation::eval_set("AB|", &sets);
-    result.sort();
-    assert_eq!(result, vec![0, 1, 2, 3, 4, 5]);
+        let sets = vec![vec![0, 1, 2], vec![3, 4, 5]];
 
-    let sets = vec![
-        vec![0, 1, 2],
-    ];
+        let mut result: Vec<i32> = set_evalutation::eval_set("AB|", &sets);
+        result.sort();
+        assert_eq!(result, vec![0, 1, 2, 3, 4, 5]);
 
-    assert_eq!(set_evalutation::eval_set("A!", &sets), []);
+        let sets = vec![vec![0, 1, 2]];
+
+        assert_eq!(set_evalutation::eval_set("A!", &sets), []);
     }
 }
-
