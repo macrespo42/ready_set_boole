@@ -16,3 +16,30 @@ pub fn multiplier(a: u32, b: u32) -> u32 {
     }
     result
 }
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn multiplier_basic() {
+        assert_eq!(multiplier(4, 2), 8);
+        assert_eq!(multiplier(40, 20), 800);
+    }
+
+    #[test]
+    fn multiplier_by_zero() {
+        assert_eq!(multiplier(0, 2), 0);
+        assert_eq!(multiplier(4, 0), 0);
+    }
+
+    #[test]
+    fn multiplier_with_hundred() {
+        assert_eq!(multiplier(400, 200), 8_0000);
+    }
+
+    #[test]
+    fn multiplier_with_1k() {
+        assert_eq!(multiplier(1_000, 1_000), 1_000000);
+    }
+}

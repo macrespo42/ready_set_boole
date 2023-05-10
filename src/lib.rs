@@ -1,8 +1,8 @@
 pub mod introduction;
 pub mod rewrite_rule;
 pub mod set_theory;
-pub mod spaces_filling_curves;
 
+#[allow(unused_imports)]
 use crate::introduction::*;
 #[allow(unused_imports)]
 use crate::rewrite_rule::*;
@@ -15,25 +15,6 @@ mod introduction_test {
     use crate::set_theory::set_evalutation::eval_set;
 
     use super::*;
-
-    #[test]
-    fn adder_tests() {
-        assert_eq!(adder::adder(4, 2), 6);
-        assert_eq!(adder::adder(0, 0), 0);
-        assert_eq!(adder::adder(4, 0), 4);
-        assert_eq!(adder::adder(0, 2), 2);
-        assert_eq!(adder::adder(4000, 2000), 6000);
-        assert_eq!(adder::adder(40000, 20000), 60000);
-    }
-
-    #[test]
-    fn multiplier_tests() {
-        assert_eq!(multiplier::multiplier(4, 2), 8);
-        assert_eq!(multiplier::multiplier(0, 2), 0);
-        assert_eq!(multiplier::multiplier(4, 0), 0);
-        assert_eq!(multiplier::multiplier(40, 20), 800);
-        assert_eq!(multiplier::multiplier(400, 200), 80000);
-    }
 
     #[test]
     fn gray_code_tests() {
