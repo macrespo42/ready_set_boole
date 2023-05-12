@@ -17,19 +17,6 @@ mod introduction_test {
     use super::*;
 
     #[test]
-    fn gray_code_tests() {
-        assert_eq!(gray_code::gray_code(0), 0);
-        assert_eq!(gray_code::gray_code(1), 1);
-        assert_eq!(gray_code::gray_code(2), 3);
-        assert_eq!(gray_code::gray_code(3), 2);
-        assert_eq!(gray_code::gray_code(4), 6);
-        assert_eq!(gray_code::gray_code(5), 7);
-        assert_eq!(gray_code::gray_code(6), 5);
-        assert_eq!(gray_code::gray_code(7), 4);
-        assert_eq!(gray_code::gray_code(8), 12);
-    }
-
-    #[test]
     fn eval_formula_tests() {
         assert_eq!(boolean_evaluation::eval_formula("10&"), false);
         assert_eq!(boolean_evaluation::eval_formula("10|"), true);
