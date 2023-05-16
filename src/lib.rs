@@ -17,14 +17,6 @@ mod introduction_test {
     use super::*;
 
     #[test]
-    fn sat_test() {
-        assert_eq!(sat::sat("AB|"), true);
-        assert_eq!(sat::sat("AB&"), true);
-        // assert_eq!(sat::sat("AA!&"), false);
-        // assert_eq!(sat::sat("AA^!"), false);
-    }
-
-    #[test]
     fn powerset_test() {
         assert_eq!(powerset::powerset(&[]), [[]]);
         assert_eq!(powerset::powerset(&[42]), vec![vec![], vec![42]]);

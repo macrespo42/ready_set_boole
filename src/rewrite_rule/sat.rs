@@ -8,21 +8,25 @@ struct AstNode {
 
 impl AstNode {
     fn new(item: char) -> AstNode {
-        return AstNode { item: (item), left_leaf: (None), right_leaf: (None) };
+        return AstNode {
+            item: (item),
+            left_leaf: (None),
+            right_leaf: (None),
+        };
     }
 
     fn parse_formula(&mut self, formula: &mut Vec<char>) {
         let operand: Vec<char> = vec!['!', '&', '|', '^', '>', '='];
         self.item = formula.last().copied().unwrap();
         let c: char = formula.pop().unwrap();
-        if operand.iter().any( |&i| i == c) {
+        if operand.iter().any(|&i| i == c) {
             self.left_leaf = Some(Box::new(AstNode::new('0')));
             if c != '!' {
                 self.right_leaf = Some(Box::new(AstNode::new('0')));
                 self.right_leaf.as_mut().unwrap().parse_formula(formula);
             }
             self.left_leaf.as_mut().unwrap().parse_formula(formula);
-        } 
+        }
     }
 
     fn compute(&mut self) -> bool {
@@ -35,7 +39,7 @@ impl AstNode {
         }
         let left_expr = self.left_leaf.as_mut().unwrap().compute();
         let right_expr = self.right_leaf.as_mut().unwrap().compute();
-        match self.item { 
+        match self.item {
             '&' => return left_expr & right_expr,
             '|' => return left_expr | right_expr,
             '^' => return left_expr ^ right_expr,
@@ -47,7 +51,7 @@ impl AstNode {
 }
 
 fn eval_formula(formula: &str) -> bool {
-    let mut formula_stack: Vec<char> = formula.chars().collect(); 
+    let mut formula_stack: Vec<char> = formula.chars().collect();
     let mut root = AstNode::new('0');
     root.parse_formula(&mut formula_stack);
     return root.compute();
@@ -81,7 +85,7 @@ fn generate_combinations_helper(formula: &str, result_set: &mut HashSet<String>)
 }
 
 pub fn sat(formula: &str) -> bool {
-    let mut formula_stack: Vec<char> = formula.chars().collect(); 
+    let mut formula_stack: Vec<char> = formula.chars().collect();
     let mut root = AstNode::new('0');
     root.parse_formula(&mut formula_stack);
     let combinations = generate_combinations(formula);
@@ -90,6 +94,29 @@ pub fn sat(formula: &str) -> bool {
             return true;
         }
     }
-    false 
+    false
 }
 
+#[cfg(test)]
+
+mod tests {
+    use std::assert_eq;
+
+    use super::*;
+
+    #[test]
+    fn sat_with_or() {
+        assert_eq!(sat("AB|"), true);
+    }
+
+    #[test]
+    fn sat_with_and() {
+        assert_eq!(sat("AB&"), true);
+    }
+
+    #[test]
+    fn test_with_double_letter() {
+        assert_eq!(sat("AA!&"), false);
+        assert_eq!(sat("AA^!"), false);
+    }
+}
