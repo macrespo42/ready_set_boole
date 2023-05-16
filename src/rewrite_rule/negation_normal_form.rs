@@ -7,21 +7,25 @@ struct AstNode {
 
 impl AstNode {
     fn new(item: char) -> AstNode {
-        return AstNode { item: (item), left_leaf: (None), right_leaf: (None) };
+        return AstNode {
+            item: (item),
+            left_leaf: (None),
+            right_leaf: (None),
+        };
     }
 
     fn parse_formula(&mut self, formula: &mut Vec<char>) {
         let operand: Vec<char> = vec!['!', '&', '|', '^', '>', '='];
         self.item = formula.last().copied().unwrap();
         let c: char = formula.pop().unwrap();
-        if operand.iter().any( |&i| i == c) {
+        if operand.iter().any(|&i| i == c) {
             if c != '!' {
                 self.right_leaf = Some(Box::new(AstNode::new('0')));
                 self.right_leaf.as_mut().unwrap().parse_formula(formula);
             }
             self.left_leaf = Some(Box::new(AstNode::new('0')));
             self.left_leaf.as_mut().unwrap().parse_formula(formula);
-        } 
+        }
     }
 
     fn is_in(&self, haystack: &str) -> bool {
@@ -42,7 +46,7 @@ impl AstNode {
             self.right_leaf.as_mut().unwrap().negation_normal_form();
         }
 
-        if self.item == '!' && self.left_leaf.as_ref().unwrap().is_in("&|"){
+        if self.item == '!' && self.left_leaf.as_ref().unwrap().is_in("&|") {
             let right_cpy = self.left_leaf.as_mut().unwrap().right_leaf.take();
 
             if self.left_leaf.as_ref().unwrap().item == '|' {
@@ -86,11 +90,23 @@ impl AstNode {
             self.right_leaf = Some(Box::new(AstNode::new('&')));
 
             self.left_leaf.as_mut().unwrap().right_leaf = Some(Box::new(AstNode::new('!')));
-            self.left_leaf.as_mut().unwrap().right_leaf.as_mut().unwrap().left_leaf = b_cpy.clone();
+            self.left_leaf
+                .as_mut()
+                .unwrap()
+                .right_leaf
+                .as_mut()
+                .unwrap()
+                .left_leaf = b_cpy.clone();
             self.left_leaf.as_mut().unwrap().left_leaf = a_cpy.clone();
 
             self.right_leaf.as_mut().unwrap().left_leaf = Some(Box::new(AstNode::new('!')));
-            self.right_leaf.as_mut().unwrap().left_leaf.as_mut().unwrap().left_leaf = a_cpy.clone();
+            self.right_leaf
+                .as_mut()
+                .unwrap()
+                .left_leaf
+                .as_mut()
+                .unwrap()
+                .left_leaf = a_cpy.clone();
             self.right_leaf.as_mut().unwrap().right_leaf = b_cpy.clone();
             self.negation_normal_form();
         }
@@ -99,7 +115,7 @@ impl AstNode {
             let left_cpy = self.left_leaf.take();
             self.item = '|';
             self.left_leaf = Some(Box::new(AstNode::new('!')));
-            self.left_leaf.as_mut().unwrap().left_leaf= left_cpy;
+            self.left_leaf.as_mut().unwrap().left_leaf = left_cpy;
             self.negation_normal_form();
         }
     }
@@ -127,3 +143,34 @@ pub fn negation_normal_form(formula: &str) -> String {
     root.stringify()
 }
 
+#[cfg(test)]
+
+mod tests {
+    use super::*;
+
+    #[test]
+    fn negation_normal_form_with_negation() {
+        assert_eq!(negation_normal_form("AB|!"), "A!B!&");
+        assert_eq!(negation_normal_form("AB&!"), "A!B!|");
+    }
+
+    #[test]
+    fn negation_normal_form_with_material() {
+        assert_eq!(negation_normal_form("AB>"), "A!B|");
+    }
+
+    #[test]
+    fn negation_normal_form_with_equality() {
+        assert_eq!(negation_normal_form("AB="), "A!B|B!A|&");
+    }
+
+    #[test]
+    fn negation_normal_form_with_complex() {
+        assert_eq!(negation_normal_form("AB|C&!"), "A!B!&C!|");
+    }
+
+    #[test]
+    fn negation_normal_form_with_exclusive() {
+        assert_eq!(negation_normal_form("AB^"), "AB!&A!B&|");
+    }
+}
