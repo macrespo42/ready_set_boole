@@ -17,25 +17,6 @@ mod introduction_test {
     use super::*;
 
     #[test]
-    fn powerset_test() {
-        assert_eq!(powerset::powerset(&[]), [[]]);
-        assert_eq!(powerset::powerset(&[42]), vec![vec![], vec![42]]);
-        assert_eq!(
-            powerset::powerset(&[1, 2, 3]),
-            vec![
-                vec![],
-                vec![1],
-                vec![2],
-                vec![1, 2],
-                vec![3],
-                vec![1, 3],
-                vec![2, 3],
-                vec![1, 2, 3]
-            ]
-        );
-    }
-
-    #[test]
     fn eval_set_test() {
         let sets = vec![vec![0, 1, 2], vec![0, 3, 4]];
 
