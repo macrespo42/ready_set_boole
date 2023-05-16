@@ -7,21 +7,25 @@ struct AstNode {
 
 impl AstNode {
     fn new(item: char) -> AstNode {
-        return AstNode { item: (item), left_leaf: (None), right_leaf: (None) };
+        return AstNode {
+            item: (item),
+            left_leaf: (None),
+            right_leaf: (None),
+        };
     }
 
     fn parse_formula(&mut self, formula: &mut Vec<char>) {
         let operand: Vec<char> = vec!['!', '&', '|', '^', '>', '='];
         self.item = formula.last().copied().unwrap();
         let c: char = formula.pop().unwrap();
-        if operand.iter().any( |&i| i == c) {
+        if operand.iter().any(|&i| i == c) {
             if c != '!' {
                 self.right_leaf = Some(Box::new(AstNode::new('0')));
                 self.right_leaf.as_mut().unwrap().parse_formula(formula);
             }
             self.left_leaf = Some(Box::new(AstNode::new('0')));
             self.left_leaf.as_mut().unwrap().parse_formula(formula);
-        } 
+        }
     }
 
     fn is_in(&self, haystack: &str) -> bool {
@@ -42,7 +46,7 @@ impl AstNode {
             self.right_leaf.as_mut().unwrap().negation_normal_form();
         }
 
-        if self.item == '!' && self.left_leaf.as_ref().unwrap().is_in("&|"){
+        if self.item == '!' && self.left_leaf.as_ref().unwrap().is_in("&|") {
             let right_cpy = self.left_leaf.as_mut().unwrap().right_leaf.take();
 
             if self.left_leaf.as_ref().unwrap().item == '|' {
@@ -86,11 +90,23 @@ impl AstNode {
             self.right_leaf = Some(Box::new(AstNode::new('&')));
 
             self.left_leaf.as_mut().unwrap().right_leaf = Some(Box::new(AstNode::new('!')));
-            self.left_leaf.as_mut().unwrap().right_leaf.as_mut().unwrap().left_leaf = b_cpy.clone();
+            self.left_leaf
+                .as_mut()
+                .unwrap()
+                .right_leaf
+                .as_mut()
+                .unwrap()
+                .left_leaf = b_cpy.clone();
             self.left_leaf.as_mut().unwrap().left_leaf = a_cpy.clone();
 
             self.right_leaf.as_mut().unwrap().left_leaf = Some(Box::new(AstNode::new('!')));
-            self.right_leaf.as_mut().unwrap().left_leaf.as_mut().unwrap().left_leaf = a_cpy.clone();
+            self.right_leaf
+                .as_mut()
+                .unwrap()
+                .left_leaf
+                .as_mut()
+                .unwrap()
+                .left_leaf = a_cpy.clone();
             self.right_leaf.as_mut().unwrap().right_leaf = b_cpy.clone();
             self.negation_normal_form();
         }
@@ -99,7 +115,7 @@ impl AstNode {
             let left_cpy = self.left_leaf.take();
             self.item = '|';
             self.left_leaf = Some(Box::new(AstNode::new('!')));
-            self.left_leaf.as_mut().unwrap().left_leaf= left_cpy;
+            self.left_leaf.as_mut().unwrap().left_leaf = left_cpy;
             self.negation_normal_form();
         }
     }
@@ -121,10 +137,13 @@ impl AstNode {
 
     fn is_conjunctive(&self) -> bool {
         if self.item == '|' {
-            if (self.right_leaf.as_ref().unwrap().item == '&' || self.left_leaf.as_ref().unwrap().item == '&') &&
-                (self.right_leaf.as_ref().unwrap().is_in("&|") || self.left_leaf.as_ref().unwrap().is_in("&|")) {
-                    return false;
-                }
+            if (self.right_leaf.as_ref().unwrap().item == '&'
+                || self.left_leaf.as_ref().unwrap().item == '&')
+                && (self.right_leaf.as_ref().unwrap().is_in("&|")
+                    || self.left_leaf.as_ref().unwrap().is_in("&|"))
+            {
+                return false;
+            }
         }
         true
     }
@@ -132,7 +151,7 @@ impl AstNode {
     fn conjunctive_normal_form(&mut self) {
         if self.left_leaf.is_some() {
             self.left_leaf.as_mut().unwrap().conjunctive_normal_form();
-        } 
+        }
 
         if self.right_leaf.is_some() {
             self.right_leaf.as_mut().unwrap().conjunctive_normal_form();
@@ -154,13 +173,20 @@ impl AstNode {
         }
 
         if self.is_in("&|") {
-            if (self.left_leaf.is_some() && self.left_leaf.as_ref().unwrap().item == self.item) && 
-                (self.right_leaf.as_ref().unwrap().is_in("!") || self.right_leaf.as_ref().unwrap().item.is_ascii_alphanumeric()) {
-                    let right_child_cpy = self.right_leaf.take();
-                    let left_child_cpy = self.left_leaf.take();
-                    self.right_leaf = left_child_cpy;
-                    self.left_leaf = right_child_cpy;
-                }
+            if (self.left_leaf.is_some() && self.left_leaf.as_ref().unwrap().item == self.item)
+                && (self.right_leaf.as_ref().unwrap().is_in("!")
+                    || self
+                        .right_leaf
+                        .as_ref()
+                        .unwrap()
+                        .item
+                        .is_ascii_alphanumeric())
+            {
+                let right_child_cpy = self.right_leaf.take();
+                let left_child_cpy = self.left_leaf.take();
+                self.right_leaf = left_child_cpy;
+                self.left_leaf = right_child_cpy;
+            }
         }
     }
 }
@@ -172,4 +198,34 @@ pub fn conjunctive_normal_form(formula: &str) -> String {
     root.negation_normal_form();
     root.conjunctive_normal_form();
     root.stringify()
+}
+
+#[cfg(test)]
+
+mod tests {
+    use super::*;
+
+    #[test]
+    fn conjunctive_normal_form_with_negation() {
+        assert_eq!(conjunctive_normal_form("AB&!"), "A!B!|");
+        assert_eq!(conjunctive_normal_form("AB|!"), "A!B!&");
+    }
+
+    #[test]
+    fn conjunctive_normal_form_with_or() {
+        assert_eq!(conjunctive_normal_form("AB|C&"), "AB|C&");
+        assert_eq!(conjunctive_normal_form("AB|C|D|"), "DCAB|||");
+    }
+
+    #[test]
+    fn conjunctive_normal_form_with_and() {
+        assert_eq!(conjunctive_normal_form("AB&C&D&"), "DCAB&&&");
+    }
+
+    #[test]
+    fn conjunctive_normal_form_hard_tests() {
+        assert_eq!(conjunctive_normal_form("AB&!C!|"), "C!A!B!||");
+        assert_eq!(conjunctive_normal_form("AB|!C!&"), "C!A!B!&&");
+        assert_eq!(conjunctive_normal_form("ABDE&|&"), "ABD|BE|&&");
+    }
 }
