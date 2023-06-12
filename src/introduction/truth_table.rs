@@ -117,7 +117,3 @@ pub fn print_truth_table(formula: &str) {
         println!("| {} |", if eval_formula(&combination) { '1' } else { '0' });
     }
 }
-
-fn main() {
-    print_truth_table("AB&C|A");
-}

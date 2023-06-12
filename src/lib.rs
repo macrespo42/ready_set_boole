@@ -1,6 +1,7 @@
 pub mod introduction;
 pub mod rewrite_rule;
 pub mod set_theory;
+pub mod spaces_filling_curves;
 
 #[allow(unused_imports)]
 use crate::introduction::*;
