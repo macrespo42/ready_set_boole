@@ -21,9 +21,9 @@ And you can run a little CLI programm to show test output with `cargo run`
 <details>
 <summary> Rewrite rules </summary>
 
-- [Exercise 05 - Negation Normal Form]()
-- [Exercise 06 - Conjunctive Normal Form]()
-- [Exercise 07 - SAT]()
+- [Exercise 05 - Negation Normal Form](#ex05)
+- [Exercise 06 - Conjunctive Normal Form](#ex06)
+- [Exercise 07 - SAT](#ex07)
 </details>
 
 <details>
@@ -114,6 +114,42 @@ Maximum space complexity: **N/A**
 
 You must write a function that takes as input a string that contains a propositional
 formula in reverse polish notation, and writes its truth table on the standard output.  
+
+You must also turn in a main function in order to test your function, ready to be
+compiled (if necessary) and run.  
+
+###  <a name="ex05">Exercise 05 - Negation Normal Form</a>
+
+Maximum time complexity: **N/A**  
+Maximum space complexity: **N/A**  
+
+You must write a function that takes as input a string that contains a propositional
+formula in reverse polish notation, and returns an equivalent formula in **Negation Normal Form** (NNF), meaning that every negation operators must be located right after a
+variable.  
+
+You must also turn in a main function in order to test your function, ready to be
+compiled (if necessary) and run.  
+
+###  <a name="ex06">Exercise 06 - Conjunctive Normal Form</a>
+
+Maximum time complexity: **N/A**  
+Maximum space complexity: **N/A**  
+
+You must write a function that takes as input a string that contains a propositional
+formula in reverse polish notation, and returns an equivalent formula in **Conjunctive
+Normal Form** (CNF). This means that in the output, every negation must be located
+right after a variable and every conjunction must be located at the end of the formula.  
+
+You must also turn in a main function in order to test your function, ready to be
+compiled (if necessary) and run.  
+
+###  <a name="ex07">Exercise 07 - SAT</a>
+
+Maximum time complexity: **O(2n)**  
+Maximum space complexity: **N/A**  
+
+You must write a function that takes as input a string that contains a propositional
+formula in reverse polish notation and tells whether it is satisfiable.  
 
 You must also turn in a main function in order to test your function, ready to be
 compiled (if necessary) and run.  
