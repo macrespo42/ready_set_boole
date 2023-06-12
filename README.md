@@ -37,7 +37,7 @@ And you can run a little CLI programm to show test output with `cargo run`
 <summary> Space filling curves </summary>
 
 - [Exercise 10 - Curve](#ex10)
-- [Exercise 11 - Inverse function](#e11)
+- [Exercise 11 - Inverse function](#ex11)
 </details>
 
 
