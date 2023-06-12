@@ -29,14 +29,14 @@ And you can run a little CLI programm to show test output with `cargo run`
 <details>
 <summary> Set theory </summary>
 
-- [Exercise 08 - Powerset]()
-- [Exercise 09 - Set evaluation]()
+- [Exercise 08 - Powerset](#ex08)
+- [Exercise 09 - Set evaluation](#ex09)
 </details>
 
 <details>
 <summary> Space filling curves </summary>
 
-- [Exercise 10 - Curve]()
+- [Exercise 10 - Curve](#ex10)
 - [Exercise 11 - Inverse function]()
 </details>
 
@@ -150,6 +150,28 @@ Maximum space complexity: **N/A**
 
 You must write a function that takes as input a string that contains a propositional
 formula in reverse polish notation and tells whether it is satisfiable.  
+
+You must also turn in a main function in order to test your function, ready to be
+compiled (if necessary) and run.  
+
+###  <a name="ex08">Exercise 08 - Powerset</a>
+
+Maximum time complexity: **N/A**  
+Maximum space complexity: **O(2n)**  
+
+You must write a function that takes as input a set of integers, and returns its powerset.  
+
+You must also turn in a main function in order to test your function, ready to be
+compiled (if necessary) and run.  
+
+###  <a name="ex09">Exercise 09 - Set evaluation</a>
+
+Maximum time complexity: **N/A**  
+Maximum space complexity: **N/A**  
+
+You must write a function that takes as input a string that contains a propositional
+formula in reverse polish notation, and a list of sets (each containing numbers), then
+evaluates this list and returns the resulting set.  
 
 You must also turn in a main function in order to test your function, ready to be
 compiled (if necessary) and run.  
