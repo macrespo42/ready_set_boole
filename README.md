@@ -37,7 +37,7 @@ And you can run a little CLI programm to show test output with `cargo run`
 <summary> Space filling curves </summary>
 
 - [Exercise 10 - Curve](#ex10)
-- [Exercise 11 - Inverse function]()
+- [Exercise 11 - Inverse function](#e11)
 </details>
 
 
@@ -172,6 +172,31 @@ Maximum space complexity: **N/A**
 You must write a function that takes as input a string that contains a propositional
 formula in reverse polish notation, and a list of sets (each containing numbers), then
 evaluates this list and returns the resulting set.  
+
+You must also turn in a main function in order to test your function, ready to be
+compiled (if necessary) and run.  
+
+###  <a name="ex10">Exercise 10 - Curve</a>
+
+Maximum time complexity: **N/A**  
+Maximum space complexity: **N/A**  
+
+You must write a function (the inverse of a space-filling curve, used to encode spatial
+data into a line) that takes a pair of coordinates in two dimensions and assigns a unique
+value in the closed interval [0; 1] ∈ R.  
+
+You must also turn in a main function in order to test your function, ready to be
+compiled (if necessary) and run.  
+
+
+###  <a name="ex11">Exercise 11 - Inverse function</a>
+
+Maximum time complexity: **N/A**  
+Maximum space complexity: **N/A**  
+
+You must write the inverse function f
+−1 of the function f from the previous exercise (so
+this time, this is a space-filling curve, used to decode data from a line into a space).  
 
 You must also turn in a main function in order to test your function, ready to be
 compiled (if necessary) and run.  
