@@ -138,19 +138,3 @@ pub fn print_truth_table(formula: &str) {
         println!("| {} |", if eval_formula(&formula) { '1' } else { '0' });
     }
 }
-
-fn main() {
-    let expression = "AA&";
-    let expression = remove_letter_duplicates(expression);
-    let formulas = generate_formulas(&expression);
-
-    for formula in formulas {
-        println!("{}", formula);
-    }
-    // print_truth_table("AB&");
-    // print_truth_table("QT&");
-    // print_truth_table("AB>");
-    // print_truth_table("SS=");
-    // print_truth_table("EX>R=Y^");
-    print_truth_table("AA&");
-}
