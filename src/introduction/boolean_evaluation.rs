@@ -15,6 +15,9 @@ impl AstNode {
 
     fn parse_formula(&mut self, formula: &mut Vec<char>) {
         let operand: Vec<char> = vec!['!', '&', '|', '^', '>', '='];
+        if formula.len() == 0 {
+            return;
+        }
         self.item = formula.last().copied().unwrap();
         let c: char = formula.pop().unwrap();
         if operand.iter().any(|&i| i == c) {
@@ -97,5 +100,10 @@ mod tests {
         assert_eq!(eval_formula("101|&!"), false);
         assert_eq!(eval_formula("1011||="), true);
         assert_eq!(eval_formula("1011||=!"), false);
+    }
+
+    #[test]
+    fn eval_formula_xor() {
+        assert_eq!(eval_formula("00^"), false);
     }
 }

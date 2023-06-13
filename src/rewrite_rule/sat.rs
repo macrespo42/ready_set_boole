@@ -1,5 +1,3 @@
-use std::collections::HashSet;
-
 struct AstNode {
     item: char,
     left_leaf: Option<Box<AstNode>>,
@@ -17,6 +15,9 @@ impl AstNode {
 
     fn parse_formula(&mut self, formula: &mut Vec<char>) {
         let operand: Vec<char> = vec!['!', '&', '|', '^', '>', '='];
+        if formula.len() == 0 {
+            return;
+        }
         self.item = formula.last().copied().unwrap();
         let c: char = formula.pop().unwrap();
         if operand.iter().any(|&i| i == c) {
@@ -42,7 +43,9 @@ impl AstNode {
         match self.item {
             '&' => return left_expr & right_expr,
             '|' => return left_expr | right_expr,
-            '^' => return left_expr ^ right_expr,
+            '^' => {
+                return left_expr ^ right_expr;
+            }
             '>' => return !(left_expr && !right_expr),
             '=' => return left_expr == right_expr,
             _ => return false,
@@ -57,38 +60,41 @@ fn eval_formula(formula: &str) -> bool {
     return root.compute();
 }
 
-fn generate_combinations(formula: &str) -> Vec<String> {
-    let mut result_set: HashSet<String> = HashSet::new();
-    generate_combinations_helper(formula, &mut result_set);
-    result_set.into_iter().collect()
-}
+fn generate_formulas(expression: &str) -> Vec<String> {
+    let mut formulas: Vec<String> = Vec::new();
 
-fn generate_combinations_helper(formula: &str, result_set: &mut HashSet<String>) {
-    if formula.is_empty() {
-        result_set.insert("".to_string());
-        return;
-    }
-    let rest = &formula[1..];
-    let sub_combinations = generate_combinations(rest);
-    let current_char = formula.chars().next().unwrap();
-    if current_char.is_alphabetic() {
-        for sub_combination in sub_combinations {
-            result_set.insert(format!("{}{}", '0', sub_combination));
-            result_set.insert(format!("{}{}", '1', sub_combination));
+    let mut variables: Vec<char> = expression
+        .chars()
+        .filter(|&ch| ch.is_alphabetic())
+        .collect();
+
+    variables.sort();
+    variables.dedup();
+
+    let num_combinations = 2u32.pow(variables.len() as u32);
+
+    for i in 0..num_combinations {
+        let mut formula = String::new();
+
+        for ch in expression.chars() {
+            match ch {
+                'A'..='Z' => {
+                    let var_idx = variables.iter().position(|&v| v == ch).unwrap();
+                    let value = (i >> (variables.len() - var_idx - 1)) & 1;
+                    formula.push_str(&value.to_string());
+                }
+                _ => formula.push(ch),
+            }
         }
-    } else {
-        for sub_combination in sub_combinations {
-            let new_sub_combination = format!("{}{}", current_char, sub_combination);
-            result_set.insert(new_sub_combination);
-        }
+
+        formulas.push(formula);
     }
+
+    formulas
 }
 
 pub fn sat(formula: &str) -> bool {
-    let mut formula_stack: Vec<char> = formula.chars().collect();
-    let mut root = AstNode::new('0');
-    root.parse_formula(&mut formula_stack);
-    let combinations = generate_combinations(formula);
+    let combinations = generate_formulas(formula);
     for combination in combinations {
         if eval_formula(&combination) == true {
             return true;
@@ -117,6 +123,6 @@ mod tests {
     #[test]
     fn test_with_double_letter() {
         assert_eq!(sat("AA!&"), false);
-        assert_eq!(sat("AA^!"), false);
+        assert_eq!(sat("AA^"), false);
     }
 }
