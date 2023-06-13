@@ -1,12 +1,20 @@
-use std::io;
+use std::{io, vec};
 mod introduction;
 mod spaces_filling_curves;
+
+use ready_set_boole::rewrite_rule::conjuctive_normal_form::conjunctive_normal_form;
+use ready_set_boole::rewrite_rule::negation_normal_form::negation_normal_form;
+use ready_set_boole::rewrite_rule::sat;
+use ready_set_boole::set_theory::powerset::powerset;
+use ready_set_boole::set_theory::set_evalutation::eval_set;
 
 use crate::introduction::adder::adder;
 use crate::introduction::boolean_evaluation::eval_formula;
 use crate::introduction::gray_code::gray_code;
 use crate::introduction::multiplier::multiplier;
 use crate::introduction::truth_table::print_truth_table;
+use crate::spaces_filling_curves::curve::map;
+use crate::spaces_filling_curves::inverse_function::reverse_map;
 
 fn main() {
     println!("ready... set... boole! 🏁 Choose the exercice you want to check:");
@@ -110,6 +118,72 @@ fn main() {
             print_truth_table("EX>R=Y^");
             println!("-------------------------------------");
         }
+        5 => {
+            println!("\nExercise 05 - Negation Normal Form");
+            println!("-------------------------------------");
+            ex05("AB|!", "A!B!&");
+            ex05("AB&!", "A!B!|");
+            ex05("AB>", "A!B|");
+            ex05("AB=", "A!B|B!A|&");
+            ex05("AB|C&!", "A!B!&C!|");
+            ex05("AB^", "AB!&A!B&|");
+        }
+        6 => {
+            println!("\nExercise 06 - Conjuctive Normal Form");
+            println!("-------------------------------------");
+            ex06("AB&!", "A!B!|");
+            ex06("AB|!", "A!B!&");
+            ex06("AB|C&", "AB|C&");
+            ex06("AB|C|D|", "DCAB|||");
+            ex06("AB&C&D&", "DCAB&&&");
+            ex06("AB&!C!|", "C!A!B!||");
+            ex06("AB|!C!&", "C!A!B!&&");
+            ex06("ABDE&|&", "ABD|BE|&&");
+        }
+        7 => {
+            println!("\nExercise 07 - SAT");
+            println!("-------------------------------------");
+            ex07("AB|", true);
+            ex07("AB&", true);
+            ex07("AA!&", false);
+            ex07("AA^", false);
+        }
+        8 => {
+            println!("\nExercise 08 - Powerset");
+            println!("-------------------------------------");
+            println!("Empty set:");
+            println!("{:?}", powerset(&[]));
+            println!("-------------------------------------");
+            println!("With [42]");
+            println!("{:?}", powerset(&[42]));
+            println!("-------------------------------------");
+            println!("With [1, 2, 3]");
+            println!("{:?}", powerset(&[1, 2, 3]));
+            println!("-------------------------------------");
+        }
+        9 => {
+            println!("\nExercise 09 - Set evaluation");
+            println!("-------------------------------------");
+            ex09("AB&", &vec![vec![0, 1, 2], vec![0, 3, 4]], vec![0]);
+            ex09(
+                "AB|",
+                &vec![vec![0, 1, 2], vec![3, 4, 5]],
+                vec![0, 1, 2, 3, 4, 5],
+            );
+            ex09("A!", &vec![vec![0, 1, 2]], vec![]);
+        }
+        10 | 11 => {
+            println!("\nExercise 10 / 11 - Curve & Inverse function");
+            test_map(0, 0);
+            test_map(1, 0);
+            test_map(0, 1);
+            test_map(100, 100);
+            test_map(30000, 1);
+            test_map(1, 30000);
+            test_map(65534, 65535);
+            test_map(65535, 65534);
+            test_map(65535, 65535);
+        }
         _ => println!("This exercice does not exist or are not implemented yet 🙄"),
     }
 }
@@ -139,5 +213,43 @@ fn ex03(formula: &str, expected: bool) {
     println!("formula: {formula}");
     println!("expected: {expected}");
     println!("got: {}", eval_formula(formula));
+    println!("-------------------------------------");
+}
+
+fn ex05(formula: &str, expected: &str) {
+    println!("nnf of {formula}");
+    println!("expected: {expected}");
+    println!("got: {}", negation_normal_form(formula));
+    println!("-------------------------------------");
+}
+
+fn ex06(formula: &str, expected: &str) {
+    println!("cff of {formula}");
+    println!("expected: {expected}");
+    println!("got: {}", conjunctive_normal_form(formula));
+    println!("-------------------------------------");
+}
+
+fn ex07(formula: &str, expected: bool) {
+    println!("SAT of {formula}");
+    println!("expected: {expected}");
+    println!("got: {}", sat::sat(formula));
+    println!("-------------------------------------");
+}
+
+fn ex09(formula: &str, sets: &Vec<Vec<i32>>, expected: Vec<i32>) {
+    println!("Set evaluation of : {formula} with sets: {:?}", sets);
+    println!("expected: {:?}", expected);
+    println!("got: {:?}", eval_set(formula, sets));
+    println!("-------------------------------------");
+}
+
+fn test_map(x: u16, y: u16) {
+    println!("Converting {} and {}", x, y);
+    let mapped: f64 = map(x, y);
+    println!("Converted to {} !", mapped);
+    println!("Reversing conversion...");
+    let unmapped: (u16, u16) = reverse_map(mapped);
+    println!("Number evaluates to x {} and y {}", unmapped.0, unmapped.1);
     println!("-------------------------------------");
 }
