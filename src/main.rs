@@ -53,7 +53,6 @@ fn main() {
         1 => {
             println!("\nExercise 01 - Multiplier");
             println!("-------------------------------------");
-            ex01(4, 2);
             ex01(1, 2);
             ex01(3, 3);
             ex01(23, 3);
@@ -62,6 +61,7 @@ fn main() {
             ex01(4, 0);
             ex01(4_00, 2_00);
             ex01(1_000, 1_000);
+            ex01(1, u32::MAX);
         }
         2 => {
             println!("\nExercise 02 - Gray code");
@@ -196,7 +196,7 @@ fn ex00(a: u32, b: u32) {
 }
 
 fn ex01(a: u32, b: u32) {
-    println!("{a} + {b}");
+    println!("{a} * {b}");
     println!("expected: {}", a * b);
     println!("got: {}", multiplier(a, b));
     println!("-------------------------------------");
