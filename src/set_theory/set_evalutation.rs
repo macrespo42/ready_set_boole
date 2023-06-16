@@ -217,4 +217,18 @@ mod tests {
 
         assert_eq!(eval_set("A!", &sets), []);
     }
+
+    #[test]
+    fn eval_set_stress_test() {
+        let sets = vec![vec![0], vec![0], vec![0]];
+
+        assert_eq!(eval_set("ABC||", &sets), [0]);
+        assert_eq!(eval_set("ABC&&", &sets), [0]);
+        assert_eq!(eval_set("ABC^^", &sets), [0]);
+        assert_eq!(eval_set("ABC>>", &sets), [0]);
+
+        let sets = vec![vec![0], vec![0], vec![]];
+
+        assert_eq!(eval_set("ABC&&", &sets), []);
+    }
 }
