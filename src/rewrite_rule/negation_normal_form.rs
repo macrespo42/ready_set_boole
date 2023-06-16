@@ -173,4 +173,10 @@ mod tests {
     fn negation_normal_form_with_exclusive() {
         assert_eq!(negation_normal_form("AB^"), "AB!&A!B&|");
     }
+
+    #[test]
+    fn negation_normal_form_unique() {
+        assert_eq!(negation_normal_form("A"), "A");
+        assert_eq!(negation_normal_form("A!"), "A!");
+    }
 }

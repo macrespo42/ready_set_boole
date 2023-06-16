@@ -228,4 +228,10 @@ mod tests {
         assert_eq!(conjunctive_normal_form("AB|!C!&"), "C!A!B!&&");
         assert_eq!(conjunctive_normal_form("ABDE&|&"), "ABD|BE|&&");
     }
+
+    #[test]
+    fn conjunctive_normal_form_unique() {
+        assert_eq!(conjunctive_normal_form("A"), "A");
+        assert_eq!(conjunctive_normal_form("A!"), "A!");
+    }
 }

@@ -106,4 +106,12 @@ mod tests {
     fn eval_formula_xor() {
         assert_eq!(eval_formula("00^"), false);
     }
+
+    #[test]
+    fn eval_formula_unique() {
+        assert_eq!(eval_formula("0"), false);
+        assert_eq!(eval_formula("1"), true);
+        assert_eq!(eval_formula("1!"), false);
+        assert_eq!(eval_formula("0!"), true);
+    }
 }
