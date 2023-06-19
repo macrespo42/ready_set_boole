@@ -1,18 +1,19 @@
 use std::{io, vec};
 mod introduction;
+mod rewrite_rule;
+mod set_theory;
 mod spaces_filling_curves;
-
-use ready_set_boole::rewrite_rule::conjuctive_normal_form::conjunctive_normal_form;
-use ready_set_boole::rewrite_rule::negation_normal_form::negation_normal_form;
-use ready_set_boole::rewrite_rule::sat;
-use ready_set_boole::set_theory::powerset::powerset;
-use ready_set_boole::set_theory::set_evalutation::eval_set;
 
 use crate::introduction::adder::adder;
 use crate::introduction::boolean_evaluation::eval_formula;
 use crate::introduction::gray_code::gray_code;
 use crate::introduction::multiplier::multiplier;
 use crate::introduction::truth_table::print_truth_table;
+use crate::rewrite_rule::conjuctive_normal_form::conjunctive_normal_form;
+use crate::rewrite_rule::negation_normal_form::negation_normal_form;
+use crate::rewrite_rule::sat::sat;
+use crate::set_theory::powerset::powerset;
+use crate::set_theory::set_evalutation::eval_set;
 use crate::spaces_filling_curves::curve::map;
 use crate::spaces_filling_curves::inverse_function::reverse_map;
 
@@ -117,6 +118,8 @@ fn main() {
             println!("Truth table of: EX>R=Y^");
             print_truth_table("EX>R=Y^");
             println!("-------------------------------------");
+            println!("Truth table of: A");
+            print_truth_table("A");
         }
         5 => {
             println!("\nExercise 05 - Negation Normal Form");
@@ -233,7 +236,7 @@ fn ex06(formula: &str, expected: &str) {
 fn ex07(formula: &str, expected: bool) {
     println!("SAT of {formula}");
     println!("expected: {expected}");
-    println!("got: {}", sat::sat(formula));
+    println!("got: {}", sat(formula));
     println!("-------------------------------------");
 }
 
