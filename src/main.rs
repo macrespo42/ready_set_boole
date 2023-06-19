@@ -103,17 +103,26 @@ fn main() {
         4 => {
             println!("\nExercise 04 - Truth table");
             println!("-------------------------------------");
-            println!("Truth table of: QT&");
-            print_truth_table("QT&");
+            println!("Truth table of: AB&");
+            print_truth_table("AB&");
             println!("-------------------------------------");
             println!("Truth table of: AB>");
             print_truth_table("AB>");
+            println!("-------------------------------------");
+            println!("Truth table of: AB^");
+            print_truth_table("AB^");
             println!("-------------------------------------");
             println!("Truth table of: SS=");
             print_truth_table("SS=");
             println!("-------------------------------------");
             println!("Truth table of: A");
             print_truth_table("A");
+            println!("-------------------------------------");
+            println!("Truth table of: A!");
+            print_truth_table("A!");
+            println!("-------------------------------------");
+            println!("Truth table of: AA!");
+            print_truth_table("AA!");
             println!("-------------------------------------");
             println!("Truth table of: AB&C|");
             print_truth_table("AB&C|");
