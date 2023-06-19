@@ -179,4 +179,11 @@ mod tests {
         assert_eq!(negation_normal_form("A"), "A");
         assert_eq!(negation_normal_form("A!"), "A!");
     }
+
+    #[test]
+    fn negation_normal_form_already_valid() {
+        assert_eq!(negation_normal_form("AB|C&"), "AB|C&");
+        assert_eq!(negation_normal_form("A!B|"), "A!B|");
+        assert_eq!(negation_normal_form("AB!&"), "AB!&");
+    }
 }
