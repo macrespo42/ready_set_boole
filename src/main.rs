@@ -103,9 +103,6 @@ fn main() {
         4 => {
             println!("\nExercise 04 - Truth table");
             println!("-------------------------------------");
-            println!("Truth table of: AB&C|");
-            print_truth_table("AB&C|");
-            println!("-------------------------------------");
             println!("Truth table of: QT&");
             print_truth_table("QT&");
             println!("-------------------------------------");
@@ -115,11 +112,15 @@ fn main() {
             println!("Truth table of: SS=");
             print_truth_table("SS=");
             println!("-------------------------------------");
-            println!("Truth table of: EX>R=Y^");
-            print_truth_table("EX>R=Y^");
-            println!("-------------------------------------");
             println!("Truth table of: A");
             print_truth_table("A");
+            println!("-------------------------------------");
+            println!("Truth table of: AB&C|");
+            print_truth_table("AB&C|");
+            println!("-------------------------------------");
+            println!("Truth table of: DCAB&&&");
+            print_truth_table("DCAB&&&");
+            println!("-------------------------------------");
         }
         5 => {
             println!("\nExercise 05 - Negation Normal Form");
