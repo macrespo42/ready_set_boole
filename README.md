@@ -1,5 +1,10 @@
 # ready... set... boole! 🏁
 
+![GitHub last commit](https://img.shields.io/github/last-commit/macrespo42/ready_set_boole)
+![GitHub stars](https://img.shields.io/github/stars/macrespo42/ready_set_boole)
+![GitHub forks](https://img.shields.io/github/forks/macrespo42/ready_set_boole)
+![License](https://img.shields.io/github/license/macrespo42/ready_set_boole)
+
 ## An introduction project to boolean algebra and set theory
 
 All the unit test for the project can be run with `cargo test`  
